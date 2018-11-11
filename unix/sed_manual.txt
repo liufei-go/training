@@ -30,3 +30,6 @@
 
 11. cat file.txt | sed '10s/pattern1/pattern2/g'
 	Replace pattern1 with pattern2 only at line 10
+
+12. cat file.txt | sed 's/hello/(&)/g'
+	& is used as reference of matched pattern. In this case hello is put inside ()
