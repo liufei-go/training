@@ -1,0 +1,8 @@
+1. find . -user xxx
+   Find all files owned by user xxx
+
+2. find . -group xxx
+   Find all files owned by group xxx
+
+3. find . -mmin -n
+   Find all files that were lastly modified <n mins ago
