@@ -1,6 +1,14 @@
 Main components of Git:
 
-Working Directory ||  Staged Snapshot || Commit History
+Visualization
+					Lost || Working Directory ||  Staged Snapshot || Commit History
+git add 							=====================>
+git commit 									 			 ==================>
+git checkout						<=======================================
+git reset --hard	  <=====================================================
+git reset --mixed     				<=======================================
+git reset --soft										 <==================
+
 
 git checkout:
 1) 	branch: switch to target branch
@@ -16,7 +24,7 @@ git reset: default to --mixed
    	git reset HEAD~2
    	git reset <oldest_commit>^..<newest_commit>
  	git reset --hard <commit_id>: reset both working directory and stage index to the specific commit_id.
- 	git reset --mixed <commit_id>: reset to the specific commit_id. Any changes 
+ 	git reset --mixed <commit_id>: reset stage index to the specific commit_id. Any changes will be put into working directory. If there are no changes, then git reset --mixed is thje same as --hard.
 2) 	file: unstage a file
 	git reset file.txt
 	git reset HEAD~2 file.txt: fetch the version of file.txt in the 2nd-to-last commit and stage it for next commit
