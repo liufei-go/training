@@ -1,0 +1,38 @@
+0. Distributed system: a group of computers working together as to appear as a single computer to the end-user. These machines have a shared state, operate concurrently and can fail independently without affecting the whole system’s uptime.
+
+1. Vertical scale: upgrade the performance of a host
+   Horizontal scale: incrase the number of hosts
+
+2. Fault tolerance: error in one host will not impact all
+   Low latency: time in communications among all hosts
+
+3. Master-Slave Replication: master host for read + write and slave hosts for read only. When new record is inserted to master, an async process will update the record with slave hosts.
+   Pitfall: data could be inconsistent as propagating new information from master to slave may not be immediate
+
+4. Multi-master Replication: create multiple master hosts
+   Pitfall: data conflicts, i.e., insert two records with the same ID
+
+5. Sharding/Partitioning: split all servers into multiple smaller servers (called shards). For example, for people's names, split by first character.
+   Pitfall: difficult to query all data by keys other than the partitioned key. 
+
+6. Decentralized system: a special distributed system. However, it is not owned by one actor. Most distributed systems today are not *decentralized*. 
+
+7. CAP Theorem: a distributed data store cannot simultaneously be Consistent, Available and Partition tolerant. (chose 2 among 3)
+   - Consistency: a read request for an entity made to any nodes returns the same data
+   - Availability: the whole system never dies
+   - Paritition tolerant: the system continues to function and uphold its consistency/availability guarantees in spite of network partitions.
+
+   In practice, most applications cares more availability. Data consistency is not required. 
+
+8. Eventual consistency: data of each node of the database gets consistent eventually. In other words, it will take time for updates to reach other nodes.
+   Pro: low latency
+   Pitfall: stale data
+
+9. Strong consistency: immediately update with all nodes.
+   Pro: absolute consistent
+   Pitfall: high latency
+
+10. Distributed File Systems: can be thought as distributed data stores.
+
+11. Distributed Messaging
+    - Message: is a broadcast from application which create it (called producer), goes into the platform and is read by multiple applications which are interested in it (called consumer)

@@ -1,0 +1,97 @@
+1. 	Print function
+   	println()
+
+2. 	Declare array
+   	var ages = Array(20, 50)
+
+3.	Define a function
+   	def isOddAge(age:Int) : Boolean = {
+  		(age % 2) == 1
+	}
+
+4.	Creating RDD:
+	4.1	Parallize an object collection (eager type)
+	    E.g.,	val stringList = Array("Spark is awesome","Spark is cool")
+			  	val stringRDD = spark.sparkContext.parallelize(stringList)
+	4.2 Read a dataset from a storage system (lazy type)
+		E.g.,	val fileRDD = spark.sparkContext.textFile("/tmp/data.txt")
+	4.3	Transform an existing RDD
+
+5.	Common Transformations of RDD
+	5.1	map(func): applies the provided function to each row as iterating through the rows in the data set. The returned RDD will contain whatever the provided func returns 
+	5.2	flatMap(func): very similar to map
+	5.3 union(otherRDD): it takes another RDD as an argument. It will return an RDD that combines the rows from both RDD. This is useful when append some rows to the existing RDD. Note that union does not remove duplicate rows. In other words, union is simply a concatenation.
+	5.4 intersection(otherRDD): find common elements in 2 RDDs
+	5.5 substract(otherRDD): remove all elements in the other RDD
+	5.6 distict(): find all unique elements in the RDD
+	5.7 sample(withReplacement, fraction, [seed]): withReplacement is a boolean to indicate if an element could be selected more than 1 time. fraction is a value between 0 and 1. 
+
+6. Common Actions of RDD
+	6.1 collect(): collects all the rows in the dataset
+	6.2 count(): returns number of rows in the dataset
+	6.3 first(): returns the first row in the dataset
+	6.4 take(n): returns the first n rows in the dataset. first() == take(1)
+	6.5 reduce(func): performs an aggregation on the rows in the dataset using the provided func
+	6.6 takeSample(withReplacement, n, [seed]). returns an array rather than RDD in sample above
+	6.7 takeOrdered(n, [ordering]): sort all rows and returns the first n rows in the dataset
+	6.8 top(n, [ordering]): returns the top n elelemts in the dataset
+	6.9 saveAsTextFile(path): write all the rows in the dataset as a text file into the provided path. Each row will be converted to string. It needs path name rather than file name. It will fail if the path already exists
+
+7. Common Transformations for Key/Value Pair RDD
+	7.1 groupByKey([numTasks]): group all the values of the same key together
+	7.2 reduceByKey(func, [numTasks]): first performs the grouping of values by the key. Then apply the specified func to return the list of values down to a single value.
+	7.3 sortByKey([ascending], [numTasks]): sorts the rows according to the keys.
+	7.4 join(otherRDD), [numTasks]: join the rows in both RDDs by matching their keys. Each row of the returned RDD contains a tuple where the first element is the key and the second element is another tuple containing the values from both RDDs.
+
+	Note: numTasks is a parameter used to control the degree of parallelism when Spark performs the transformation on the parent RDD. By default, it is the number of partitions of the parent RDD. But you could increase it to boost the transformation performance.
+
+8. Common Actions of Key/Value Pair RDD
+	8.1 countByKey(): returns a map where each entry contains the key and a count of values
+	8.2 collectAsMap(): similar to collect action. Return a map
+	8.3 lookup(key): performs a lookup by key and returns all values
+
+9. Data shuffling: certain key/value transformations and actions require moving data from multiple partitions to other partitions, meaning across executors and machines. This process is called shuffle. During the shuffling process, the data needs to be serialized, written to disk, transferred over the network, and finally deserialized.
+In general, any transformation or action that performs some sort of grouping, aggregating, or joining by key will need to perform data shuffling
+
+10. RDD persistence
+	Spark allows user to persist an RDD in memory across all the executors in a cluster. This will boost performance. By default, Spark will persist the dataset in memory. However, when the memory is not sufficient, you could persist the data in memory and/or a disk. The serialization option determines whether the data in the RDD should be stored as a serialized object or not. 
+	To persist an RDD, call transformation persist() or cache(). Since it is transformation, you need to call a subsequent action to commit the persistence.
+	To undo persist, use unpersist()
+
+11. Spark SQL module consists of 2 parts: 
+	11.1 DataFrames and Datasets
+	11.2 Catalyst optimizer
+
+12. DataFrames
+	An immutable, distributed collection of data that is organized into rows, where each one consists a set of columns and each column has a name and an associated type.
+    12.1 Created from RDD using function toDF()
+    	val rdd = spark.sparkContext.parallelize(1 to 10).map(x => (x, Random.nextInt(100)* x))
+		val kvDF = rdd.toDF("key","value")
+	12.2 Created from RDD programmatically
+	12.3 Created from a range of numbers
+		val df = spark.range(5).toDF("num")
+	12.4 Created using Scala Seq collection
+		val movies = Seq(("Damon, Matt", "The Bourne Ultimatum", 2007L), 
+						("Damon, Matt", "Good Will Hunting", 1997L))
+		val moviesDF = movies.toDF("actor", "title", "year")
+	12.5 Created from data sources - 6 data sources
+		Common pattern:
+			spark.read.format(...).option("key", value").schema(...).load()
+		12.5.1 Created by reading text file
+			val textFile = spark.read.text("README.md")
+		12.5.2 Created by reading CSV file
+			val movies = spark.read.option("header","true").option("sep", "\t")
+    			.schema(movieSchema).csv("<path>/book/chapter4/data/movies/movies.tsv")		
+    	12.5.3 Created by reading JSON file
+    	12.5.4 Created by reading Parquet file
+    	12.5.5 Created by reading ORC (Optimized Row Columnar) file
+    	12.5.4 Created by reading JDBC file
+
+13. Domain Specific Language (DSL): a computer language specialized for a particular application domain.
+	Example: 
+			val kvDF = Seq((1,2),(2,3)).toDF("key","value")
+			kvDF.select("key")
+			kvDF.select(col("key"))
+			kvDF.select(column("key"))
+			kvDF.select($"key")
+			kvDF.select('key)

@@ -1,0 +1,22 @@
+Main components of Git:
+
+Working Directory ||  Staged Snapshot || Commit History
+
+git checkout:
+1) 	branch: switch to target branch
+2) 	commit: reviewing old commit
+3) 	file: discard changes in the working directory
+	git checkout HEAD~2 file.txt: 
+
+git revert:
+1) 	commit: undo changes in the specific commits by creating a new commit being appended
+
+git reset: default to --mixed
+1) 	commit: discard commits in private branch or throw away uncommitted changes
+   	git reset HEAD~2
+   	git reset <oldest_commit>^..<newest_commit>
+ 	git reset --hard <commit_id>: reset both working directory and stage index to the specific commit_id.
+ 	git reset --mixed <commit_id>: reset to the specific commit_id. Any changes 
+2) 	file: unstage a file
+	git reset file.txt
+	git reset HEAD~2 file.txt: fetch the version of file.txt in the 2nd-to-last commit and stage it for next commit

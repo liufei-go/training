@@ -1,0 +1,20 @@
+1. Kerckhoff's Principle
+	A cryptosystem should be secured even if everything about the system is publicly known, except the key.
+2. XOR function
+	1 if different, 0 if the same
+3. Data Encryption Standard (DES)
+	64-bit block size and 64-bit key. Out of 64-bit key, 8 bits are reserved for parity checks and 56 are the key.
+4. Advanced Encrption Standard (AES)
+	128-bit block size. Choice of 3 keys: 128 bits, 192 bits and 256 bits
+5. Cryptographic hash functions 
+    A one-way function that converts input data of arbitrary length and produces a fixed-length output. The output is usually termed “hash value” or “message digest.”
+    Properties:
+    a. Collision resistance
+    	It is infeasible to find two different inputs, say, X and Y, that hash to the same value.
+    b. Preimage resistance
+    	This property means that it is computationally impossible to invert a hash function
+    	High min entropy: a distribution is very spread out and there is no particular value that is likely to occur.
+    	Nonce: a random number that can be used only once.
+    c. Puzzle friendliness
+    	The property means that there is no shortcut to the solution and the only way to get to the solution is to traverse through all the possible options in the input space.
+    Construction method: to iterate through arbitrary length of input data to produce fixed-sized input block into hash function. 
