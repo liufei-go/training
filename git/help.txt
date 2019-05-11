@@ -28,3 +28,5 @@ git reset: default to --mixed
 2) 	file: unstage a file
 	git reset file.txt
 	git reset HEAD~2 file.txt: fetch the version of file.txt in the 2nd-to-last commit and stage it for next commit
+
+git rm: same as rm + git add
