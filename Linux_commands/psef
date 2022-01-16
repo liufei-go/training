@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ $# -eq 0 ];then
+  echo "Need at least 1 argument"
+  echo "Usage: psef process_name"
+  exit 1
+fi
+
+keyword=$1
+
+
+ps -ef | grep ${keyword} | grep -v "grep ${keyword}" | grep -v "/bin/bash.*${keyword}"

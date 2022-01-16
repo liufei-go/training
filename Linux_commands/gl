@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [ $# -eq 0 ];then
+  echo "Need at least 1 argument"
+  echo "Usage: gl keyword <days_ago>"
+  exit 1
+fi
+
+keyword=$1
+
+ago=0
+if [ $# -eq 2 ];then
+  ago=$2
+fi
+
+# echo "keyword=${keyword}"
+# echo "ago=${ago}"
+
+if [ ${ago} -gt 7 ];then
+  echo "Error: cannot search more than 7 days"
+  exit 1
+fi
+
+if [ ${ago} -lt 0 ];then
+  echo "Error: cannot be negative"
+  exit 1
+fi
+
+if [ ${ago} -eq 0 ];then
+  grep --color=auto ${keyword} /var/log/syslog
+elif [ ${ago} -eq 1 ];then
+  grep --color=auto ${keyword} /var/log/syslog.1
+else
+  echo "here"
+  zgrep --color=auto ${keyword} /var/log/syslog.${ago}.gz
+fi
